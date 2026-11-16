@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.2
+
+- Customization: new optional variables for headings and lists, all defaulting to the previous rendered values (no visual change by default): `--bk-heading-line-height`, `--bk-h2/h3/h4-line-height`, `--bk-h2/h3/h4-margin-top` and `-margin-bottom`, `--bk-h3-weight`, `--bk-h4-weight`, `--bk-list-position`, `--bk-list-padding`, `--bk-list-item-gap`, `--bk-list-item-p-display`.
+
 ## 0.2.1
 
 - Fix: Escape in a media picker (`renderMediaPicker` or the built-in one, native `<dialog>`) no longer also closes the image dialog; close/cancel events bubbling through the React tree are ignored by `Dialog` unless they come from the dialog itself, and the picker output is isolated from close/cancel/Escape.

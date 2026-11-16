@@ -318,6 +318,7 @@ export const EMBEDS = ["aparat", "youtube"] as const;
 | شکل و فاصله | `--bk-radius`، `--bk-media-radius`، `--bk-block-gap`، `--bk-editor-min-height`، `--bk-editor-padding`، `--bk-toolbar-padding`، `--bk-toolbar-gap`، `--bk-control-size`، `--bk-dialog-width`، `--bk-dialog-wide-width` |
 | سایه و لایه | `--bk-popover-shadow`، `--bk-dialog-shadow`، `--bk-z-toolbar`، `--bk-z-popover` |
 | اختیاری (پیش‌فرض ندارند) | `--bk-link`، `--bk-heading-color`، `--bk-quote-border`، `--bk-radius-sm`، `--bk-radius-lg`، `--bk-focus-ring` |
+| عنوان‌ها و لیست‌ها (اختیاری، با پیش‌فرض) | `--bk-heading-line-height` (۱.۵)، `--bk-h2-line-height`/`--bk-h3-line-height`/`--bk-h4-line-height` (پیش‌فرض: همان `--bk-heading-line-height`)، `--bk-h2-margin-top`/`-bottom` (۲rem / ۰.۷۵rem)، `--bk-h3-margin-top`/`-bottom` (۱.۵rem / ۰.۵rem)، `--bk-h4-margin-top`/`-bottom` (۱.۲۵rem / ۰.۵rem)، `--bk-h3-weight`، `--bk-h4-weight` (۷۰۰)، `--bk-list-position` (`outside`؛ برای نشانه‌ی داخل متن `inside`)، `--bk-list-padding` (۱.۲۵rem)، `--bk-list-item-gap` (۰.۴rem)، `--bk-list-item-p-display` (`block`؛ با `inside` معمولاً `inline` لازم است) |
 
 ### ۲. تم تیره
 

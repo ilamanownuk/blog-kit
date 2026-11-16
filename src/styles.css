@@ -52,7 +52,11 @@
   /*
    * Optional (not set by default, fall back to the values shown):
    *   --bk-link (var(--bk-accent)), --bk-heading-color (inherit), --bk-quote-border (var(--bk-accent)),
-   *   --bk-radius-sm (radius - 2px), --bk-radius-lg (radius + 4px), --bk-focus-ring (var(--bk-accent))
+   *   --bk-radius-sm (radius - 2px), --bk-radius-lg (radius + 4px), --bk-focus-ring (var(--bk-accent)),
+   *   --bk-heading-line-height (1.5), --bk-h{2,3,4}-line-height (heading-line-height),
+   *   --bk-h{2,3,4}-margin-top (2rem / 1.5rem / 1.25rem), --bk-h{2,3,4}-margin-bottom (0.75rem / 0.5rem / 0.5rem),
+   *   --bk-h3-weight, --bk-h4-weight (700), --bk-list-position (outside), --bk-list-padding (1.25rem),
+   *   --bk-list-item-gap (0.4rem), --bk-list-item-p-display (block)
    */
 }
 
@@ -113,15 +117,15 @@
 .bk-rich[dir="ltr"] { text-align: left; }
 .bk-rich > *:first-child { margin-top: 0; }
 .bk-rich p { margin: 0 0 var(--bk-block-gap); }
-.bk-rich h2 { margin: 2rem 0 0.75rem; font-size: var(--bk-h2-size); font-weight: var(--bk-heading-weight); line-height: 1.5; color: var(--bk-heading-color, inherit); }
-.bk-rich h3 { margin: 1.5rem 0 0.5rem; font-size: var(--bk-h3-size); font-weight: 700; line-height: 1.5; color: var(--bk-heading-color, inherit); }
-.bk-rich h4 { margin: 1.25rem 0 0.5rem; font-size: var(--bk-h4-size); font-weight: 700; line-height: 1.5; color: var(--bk-heading-color, inherit); }
+.bk-rich h2 { margin: var(--bk-h2-margin-top, 2rem) 0 var(--bk-h2-margin-bottom, 0.75rem); font-size: var(--bk-h2-size); font-weight: var(--bk-heading-weight); line-height: var(--bk-h2-line-height, var(--bk-heading-line-height, 1.5)); color: var(--bk-heading-color, inherit); }
+.bk-rich h3 { margin: var(--bk-h3-margin-top, 1.5rem) 0 var(--bk-h3-margin-bottom, 0.5rem); font-size: var(--bk-h3-size); font-weight: var(--bk-h3-weight, 700); line-height: var(--bk-h3-line-height, var(--bk-heading-line-height, 1.5)); color: var(--bk-heading-color, inherit); }
+.bk-rich h4 { margin: var(--bk-h4-margin-top, 1.25rem) 0 var(--bk-h4-margin-bottom, 0.5rem); font-size: var(--bk-h4-size); font-weight: var(--bk-h4-weight, 700); line-height: var(--bk-h4-line-height, var(--bk-heading-line-height, 1.5)); color: var(--bk-heading-color, inherit); }
 .bk-rich a { color: var(--bk-link, var(--bk-accent)); text-decoration: underline; text-underline-offset: 4px; }
-.bk-rich ul, .bk-rich ol { margin: 0 0 var(--bk-block-gap); padding-inline-start: 1.25rem; }
+.bk-rich ul, .bk-rich ol { margin: 0 0 var(--bk-block-gap); padding-inline-start: var(--bk-list-padding, 1.25rem); list-style-position: var(--bk-list-position, outside); }
 .bk-rich ul { list-style-type: disc; }
 .bk-rich ol { list-style-type: decimal; }
-.bk-rich li + li { margin-top: 0.4rem; }
-.bk-rich li > p { margin-bottom: 0; }
+.bk-rich li + li { margin-top: var(--bk-list-item-gap, 0.4rem); }
+.bk-rich li > p { display: var(--bk-list-item-p-display, block); margin-bottom: 0; }
 .bk-rich blockquote {
   margin-block: 1.5rem;
   margin-inline: 0;
