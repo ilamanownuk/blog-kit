@@ -147,13 +147,22 @@ function ImageForm({
         </Button>
       </div>
     </form>
-      {pickerOpen
-        ? renderMediaPicker
-          ? renderMediaPicker({ onSelect: onPicked, close: closePicker })
-          : mediaApi
-            ? <MediaPicker api={mediaApi} dir={dir} onSelect={onPicked} onClose={closePicker} />
-            : null
-        : null}
+      {pickerOpen ? (
+        <div
+          style={{ display: "contents" }}
+          {...({
+            onClose: (event: React.SyntheticEvent) => event.stopPropagation(),
+            onCancel: (event: React.SyntheticEvent) => event.stopPropagation(),
+          } as React.HTMLAttributes<HTMLDivElement>)}
+          onKeyDown={(event) => event.key === "Escape" && event.stopPropagation()}
+        >
+          {renderMediaPicker ? (
+            renderMediaPicker({ onSelect: onPicked, close: closePicker })
+          ) : mediaApi ? (
+            <MediaPicker api={mediaApi} dir={dir} onSelect={onPicked} onClose={closePicker} />
+          ) : null}
+        </div>
+      ) : null}
     </>
   );
 }

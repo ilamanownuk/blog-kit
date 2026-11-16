@@ -68,7 +68,10 @@ function DialogShell({ onClose, title, dir, wide, children }: Omit<DialogProps, 
       dir={dir}
       aria-label={title}
       className={cx("bk-dialog", wide && "bk-dialog-wide", slots.dialog)}
-      onClose={onClose}
+      onClose={(event) => {
+        // React bubbles close events from nested dialogs (even portaled ones); only react to our own.
+        if (event.target === event.currentTarget) onClose();
+      }}
       onClick={(event) => {
         if (event.target === event.currentTarget) onClose();
       }}

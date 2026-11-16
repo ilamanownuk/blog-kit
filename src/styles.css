@@ -1,7 +1,9 @@
 /*
  * @ilamanownuk/blog-kit — no Tailwind needed.
  * Customize by overriding the --bk-* variables on :root or any ancestor (or `[data-bk-theme="dark"]`).
- * Every rule lives in `@layer blog-kit` in dist/styles.css, so your own unlayered CSS always wins.
+ * This file is unlayered (the default look wins over nothing but plain element styles).
+ * For a layered build, where your own CSS / Tailwind utilities always win, import styles.layered.css
+ * (the same rules inside `@layer blog-kit`).
  */
 :root {
   /* colors */
