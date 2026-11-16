@@ -18,10 +18,11 @@ export default defineConfig([
     banner: { js: '"use client";' },
     async onSuccess() {
       await mkdir("dist", { recursive: true });
-      // styles.css is wrapped in `@layer blog-kit` (consumer CSS wins); styles.unlayered.css is the plain file.
+      // styles.css is the plain file (default look always wins over resets/preflight);
+      // styles.layered.css wraps the same rules in `@layer blog-kit` for easy overrides.
       const css = await readFile("src/styles.css", "utf8");
-      await writeFile("dist/styles.unlayered.css", css);
-      await writeFile("dist/styles.css", `@layer blog-kit {\n${css}\n}\n`);
+      await writeFile("dist/styles.css", css);
+      await writeFile("dist/styles.layered.css", `@layer blog-kit {\n${css}\n}\n`);
     },
   },
   { ...common, entry: { renderer: "src/renderer/index.tsx" } },

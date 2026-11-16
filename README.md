@@ -68,7 +68,7 @@ import "@ilamanownuk/blog-kit/styles.css";
 @import "@ilamanownuk/blog-kit/styles.css";
 ```
 
-همه‌ی استایل‌ها داخل `@layer blog-kit` هستند، یعنی CSS خودتان همیشه برنده است. جزئیات در بخش [شخصی‌سازی ظاهر](#شخصیسازی-ظاهر).
+با همین یک خط، ظاهر پیش‌فرض بدون هیچ تنظیم دیگری درست نمایش داده می‌شود (حتی کنار Tailwind). برای تغییر ظاهر، بخش [شخصی‌سازی ظاهر](#شخصیسازی-ظاهر).
 
 ## استفاده‌ی سریع (ادیتور)
 
@@ -378,18 +378,14 @@ export const EMBEDS = ["aparat", "youtube"] as const;
 
 ### ۵. اولویت CSS شما و Tailwind
 
-فایل `styles.css` همه‌ی قواعد را در `@layer blog-kit` می‌گذارد، پس هر CSS بدون لایه‌ی شما روی آن غلبه می‌کند. در Tailwind v4 ترتیب لایه‌ها را صریح بنویسید تا `blog-kit` بعد از `base` (preflight) و قبل از `utilities` بیاید؛ در این حالت کلاس‌های ابزاری Tailwind هم روی آن غلبه می‌کنند:
+فایل `styles.css` بدون لایه است تا ظاهر پیش‌فرض همیشه سالم بماند؛ برای تغییر ظاهر کافی است متغیرهای `--bk-*` را عوض کنید یا با `classNames` کلاس بدهید.
+
+اگر می‌خواهید هر CSS یا کلاس Tailwind شما **بدون نیاز به انتخابگر قوی‌تر** روی استایل پکیج غلبه کند، به‌جای آن نسخه‌ی لایه‌دار را وارد کنید و ترتیب لایه‌ها را صریح بنویسید تا `blog-kit` بعد از `base` (preflight) و قبل از `utilities` بیاید:
 
 ```css
 @layer theme, base, blog-kit, components, utilities;
 @import "tailwindcss";
-@import "@ilamanownuk/blog-kit/styles.css";
-```
-
-اگر لایه‌ها را نمی‌خواهید، نسخه‌ی بدون لایه را وارد کنید (باید بعد از Tailwind/reset بیاید):
-
-```css
-@import "@ilamanownuk/blog-kit/styles.unlayered.css";
+@import "@ilamanownuk/blog-kit/styles.layered.css";
 ```
 
 برای بازنویسی کامل، با انتخابگرهای `.bk-*` (مثل `.bk-btn`، `.bk-toolbar`، `.bk-rich h2`) هر چیزی را عوض کنید. محتوای پست داخل کلاس `.bk-rich` است.
@@ -478,8 +474,8 @@ pnpm up @ilamanownuk/blog-kit --latest
 | مشکل | علت و راه‌حل |
 | --- | --- |
 | خطای `window is not defined` یا `document is not defined` | ادیتور را در یک فایل `"use client"` استفاده کنید. اگر هنوز مشکل داشت، با `next/dynamic` و `{ ssr: false }` بارگذاری کنید. |
-| ادیتور بدون ظاهر است (دکمه‌ها و کادر استایل ندارند) | `import "@ilamanownuk/blog-kit/styles.css"` را فراموش کرده‌اید، یا ترتیب لایه‌ها در Tailwind درست نیست؛ بخش «اولویت CSS» را ببینید. |
-| استایل پیش‌فرض Tailwind (preflight) لیست‌ها و تیترها را خراب کرده | ترتیب `@layer theme, base, blog-kit, components, utilities;` را بنویسید یا `styles.unlayered.css` را بعد از Tailwind وارد کنید. |
+| ادیتور بدون ظاهر است (دکمه‌ها و کادر استایل ندارند) | `import "@ilamanownuk/blog-kit/styles.css"` را فراموش کرده‌اید؛ اگر نسخه‌ی لایه‌دار را استفاده می‌کنید، ترتیب لایه‌ها را طبق بخش «اولویت CSS» بنویسید. |
+| استایل پیش‌فرض Tailwind (preflight) لیست‌ها و تیترها را خراب کرده | از `styles.css` (بدون لایه) استفاده کنید، یا در نسخه‌ی لایه‌دار ترتیب `@layer theme, base, blog-kit, components, utilities;` را بنویسید. |
 | ویدیو بعد از ذخیره ناپدید می‌شود (`iframe` حذف شده) | `allowedEmbeds` در ادیتور و سرور یکی نیست، یا آدرس از آپارات/یوتیوب نیست. |
 | عکس بعد از ذخیره حذف می‌شود | آدرس `https` نیست یا `isAllowedImageSrc` آن را رد می‌کند. |
 | تم تیره در پنجره‌ها اعمال نمی‌شود | `data-bk-theme="dark"` را روی `html` یا `body` بگذارید، نه روی wrapper. |
@@ -497,7 +493,7 @@ import { RichContent } from "@ilamanownuk/blog-kit/renderer";      // server-saf
 import { sanitizeRichText } from "@ilamanownuk/blog-kit/server";   // always sanitize on save
 ```
 
-Theming: override `--bk-*` CSS variables, use `data-bk-theme="dark"`, pass `classNames` / `toolbar` props; all CSS is inside `@layer blog-kit` (or import `styles.unlayered.css`). See `AI_INSTALL_PROMPT.md` for an agent-ready installation prompt and the full API reference.
+Theming: override `--bk-*` CSS variables, use `data-bk-theme="dark"`, pass `classNames` / `toolbar` props; `styles.css` is unlayered (default look always intact); import `styles.layered.css` to put everything in `@layer blog-kit`. See `AI_INSTALL_PROMPT.md` for an agent-ready installation prompt and the full API reference.
 
 ## توسعه
 

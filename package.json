@@ -69,7 +69,7 @@
       }
     },
     "./styles.css": "./dist/styles.css",
-    "./styles.unlayered.css": "./dist/styles.unlayered.css",
+    "./styles.layered.css": "./dist/styles.layered.css",
     "./package.json": "./package.json"
   },
   "publishConfig": {

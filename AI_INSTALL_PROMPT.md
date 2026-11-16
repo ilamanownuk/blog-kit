@@ -1,9 +1,3 @@
-# پرامپت نصب برای هوش مصنوعی
-
-**راهنما (برای شما):** کل متن داخل بلوک زیر (از `You are an AI coding agent` تا انتها) را کپی کنید و در Claude Code، Cursor، Copilot یا هر ابزار هوش مصنوعی برنامه‌نویسی در ریشه‌ی پروژه‌تان بچسبانید. اگر خواستید ظاهر یا محل ادیتور خاصی داشته باشد، یک خط توضیح فارسی یا انگلیسی در انتهای پرامپت اضافه کنید. پرامپت عمداً انگلیسی است چون مدل‌ها دستور انگلیسی را دقیق‌تر اجرا می‌کنند؛ با این حال هر پاسخی به فارسی بخواهید، می‌دهند.
-
----
-
 ````text
 You are an AI coding agent. Install and wire the npm package `@ilamanownuk/blog-kit` into THIS project, following the rules below exactly. Work step by step, and do not stop after the first working screen: finish the whole checklist.
 
@@ -14,7 +8,7 @@ You are an AI coding agent. Install and wire the npm package `@ilamanownuk/blog-
 - `@ilamanownuk/blog-kit`            -> `RichTextEditor` (client component, already has "use client"), `defaultLabels`, `defaultToolbar`, `toVideoEmbedUrl`, `normalizeLinkUrl`, `isAllowedEmbedSrc`, and types.
 - `@ilamanownuk/blog-kit/renderer`   -> `RichContent` (works in Server Components; sanitizes again), `sanitizeRichText`.
 - `@ilamanownuk/blog-kit/server`     -> `sanitizeRichText`, `hasRichContent`, `richTextToPlain`, `toVideoEmbedUrl`, `normalizeLinkUrl`, `isAllowedEmbedSrc`, `ALL_EMBED_PROVIDERS` (no React; usable in Next server actions and NestJS).
-- `@ilamanownuk/blog-kit/styles.css` -> all CSS, inside `@layer blog-kit`, themed with `--bk-*` CSS variables. `styles.unlayered.css` is the same without the layer.
+- `@ilamanownuk/blog-kit/styles.css` -> all CSS (unlayered, so the default look survives resets/Tailwind preflight), themed with `--bk-*` CSS variables. `styles.layered.css` is the same inside `@layer blog-kit` (use only if the project wants plain utilities to override it).
 
 Tiptap, lucide-react and sanitize-html are dependencies of the package. Peer deps: react and react-dom >= 19.
 
@@ -48,7 +42,7 @@ Find and note:
 
 1. Install: `<pm> add @ilamanownuk/blog-kit` (use the project's package manager).
 2. Styles: import `@ilamanownuk/blog-kit/styles.css` once, in the global CSS entry or root layout.
-   - Tailwind v4 (`@import "tailwindcss"` in CSS): add `@layer theme, base, blog-kit, components, utilities;` BEFORE the imports, then `@import "@ilamanownuk/blog-kit/styles.css";`.
+   - Tailwind v4 (`@import "tailwindcss"` in CSS): `@import "@ilamanownuk/blog-kit/styles.css";` right after the Tailwind import. (Only if you choose `styles.layered.css`: declare `@layer theme, base, blog-kit, components, utilities;` BEFORE the imports.)
    - Otherwise: `import "@ilamanownuk/blog-kit/styles.css";` in the root layout.
 3. Create ONE shared constants file (e.g. `src/lib/blog/config.ts`) with `BLOG_EMBEDS` and, if the project restricts image hosts, `isAllowedBlogImageSrc(src)`.
 4. Server side: in the action/service that creates and updates posts, replace any existing sanitizer with:
