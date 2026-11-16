@@ -3,6 +3,14 @@
 import * as React from "react";
 import { createPortal } from "react-dom";
 
+/** Extra class names per UI part; set through the editor's `classNames` prop. */
+export type EditorClassNames = Partial<
+  Record<"root" | "toolbar" | "separator" | "button" | "content" | "tableTools" | "popover" | "dialog" | "input" | "label", string>
+>;
+
+export const ClassNamesContext = React.createContext<EditorClassNames>({});
+export const useClassNames = () => React.useContext(ClassNamesContext);
+
 export const cx = (...parts: (string | false | null | undefined)[]) => parts.filter(Boolean).join(" ");
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -12,21 +20,24 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 export function Button({ variant = "ghost", size = "md", pressed, className, type = "button", ...rest }: ButtonProps) {
+  const slots = useClassNames();
   return (
     <button
       type={type}
-      className={cx("bk-btn", `bk-btn-${variant}`, `bk-btn-${size}`, pressed && "bk-pressed", className)}
+      className={cx("bk-btn", `bk-btn-${variant}`, `bk-btn-${size}`, pressed && "bk-pressed", slots.button, className)}
       {...rest}
     />
   );
 }
 
 export function Input(props: React.InputHTMLAttributes<HTMLInputElement>) {
-  return <input {...props} className={cx("bk-input", props.className)} />;
+  const slots = useClassNames();
+  return <input {...props} className={cx("bk-input", slots.input, props.className)} />;
 }
 
 export function Label(props: React.LabelHTMLAttributes<HTMLLabelElement>) {
-  return <label {...props} className={cx("bk-label", props.className)} />;
+  const slots = useClassNames();
+  return <label {...props} className={cx("bk-label", slots.label, props.className)} />;
 }
 
 type DialogProps = {
@@ -46,6 +57,7 @@ export function Dialog({ open, ...rest }: DialogProps) {
 
 function DialogShell({ onClose, title, dir, wide, children }: Omit<DialogProps, "open">) {
   const ref = React.useRef<HTMLDialogElement>(null);
+  const slots = useClassNames();
   React.useEffect(() => {
     const dialog = ref.current;
     if (dialog && !dialog.open) dialog.showModal();
@@ -55,7 +67,7 @@ function DialogShell({ onClose, title, dir, wide, children }: Omit<DialogProps, 
       ref={ref}
       dir={dir}
       aria-label={title}
-      className={cx("bk-dialog", wide && "bk-dialog-wide")}
+      className={cx("bk-dialog", wide && "bk-dialog-wide", slots.dialog)}
       onClose={onClose}
       onClick={(event) => {
         if (event.target === event.currentTarget) onClose();
@@ -74,6 +86,7 @@ type PopoverProps = {
 export function Popover({ trigger, children }: PopoverProps) {
   const [open, setOpen] = React.useState(false);
   const ref = React.useRef<HTMLSpanElement>(null);
+  const slots = useClassNames();
   React.useEffect(() => {
     if (!open) return;
     const onDown = (event: MouseEvent) => {
@@ -90,7 +103,7 @@ export function Popover({ trigger, children }: PopoverProps) {
   return (
     <span ref={ref} className="bk-popover">
       {trigger({ onClick: () => setOpen((value) => !value), open })}
-      {open ? <div className="bk-popover-content">{children}</div> : null}
+      {open ? <div className={cx("bk-popover-content", slots.popover)}>{children}</div> : null}
     </span>
   );
 }

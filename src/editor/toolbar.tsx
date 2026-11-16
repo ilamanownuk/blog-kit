@@ -11,9 +11,9 @@ import { type EmbedProvider, normalizeLinkUrl, toVideoEmbedUrl } from "../shared
 import { ColorMenu } from "./color-menu";
 import { ImageDialog } from "./image-dialog";
 import { type Labels, useLabels } from "./labels";
-import type { MediaApi, MediaPickerRenderProps, PickedImage } from "./types";
+import type { MediaApi, MediaPickerRenderProps, PickedImage, ToolbarItem } from "./types";
 import { UrlDialog } from "./url-dialog";
-import { Button } from "./ui";
+import { Button, cx, useClassNames } from "./ui";
 
 type DialogKind = "link" | "video" | "image";
 
@@ -75,9 +75,33 @@ const TABLE_ACTIONS: { key: string; label: keyof Labels; run: (editor: Editor) =
 ];
 
 const ALL_BUTTONS = GROUPS.flat();
+const BUTTONS_BY_KEY = new Map(ALL_BUTTONS.map((b) => [b.key, b]));
+
+/** Default toolbar layout; copy and edit it to pass your own `toolbar` prop. */
+export const defaultToolbar: readonly ToolbarItem[] = [
+  "bold", "italic", "underline", "strike", "textColor", "highlight", "|",
+  "h2", "h3", "h4", "|",
+  "right", "center", "left", "justify", "|",
+  "bullet", "ordered", "quote", "code", "hr", "|",
+  "link", "unlink", "image", "video", "table", "|",
+  "undo", "redo",
+];
+
+/** Drops unknown keys and leading / trailing / doubled separators. */
+function normalizeItems(items: readonly ToolbarItem[]): ToolbarItem[] {
+  const out: ToolbarItem[] = [];
+  for (const item of items) {
+    const valid = item === "|" || item === "textColor" || item === "highlight" || BUTTONS_BY_KEY.has(item);
+    if (!valid || (item === "|" && (out.length === 0 || out[out.length - 1] === "|"))) continue;
+    out.push(item);
+  }
+  while (out[out.length - 1] === "|") out.pop();
+  return out;
+}
 
 type ToolbarProps = {
   editor: Editor;
+  items?: readonly ToolbarItem[];
   dir: "rtl" | "ltr";
   allowedEmbeds: readonly EmbedProvider[];
   uploadImage?: (file: File) => Promise<PickedImage>;
@@ -86,8 +110,10 @@ type ToolbarProps = {
   resolveImageSrc?: (url: string) => string;
 };
 
-export function RichTextToolbar({ editor, dir, allowedEmbeds, ...imageProps }: ToolbarProps) {
+export function RichTextToolbar({ editor, items = defaultToolbar, dir, allowedEmbeds, ...imageProps }: ToolbarProps) {
   const labels = useLabels();
+  const slots = useClassNames();
+  const entries = React.useMemo(() => normalizeItems(items), [items]);
   const [dialog, setDialog] = React.useState<DialogKind | null>(null);
 
   // Only the state the buttons need; a transaction does not re-render everything.
@@ -106,40 +132,33 @@ export function RichTextToolbar({ editor, dir, allowedEmbeds, ...imageProps }: T
   const closeDialog = (open: boolean) => !open && setDialog(null);
 
   return (
-    <div className="bk-toolbar">
-      {GROUPS.map((group, index) => (
-        <React.Fragment key={group[0]!.key}>
-          {index > 0 ? <span className="bk-sep" aria-hidden /> : null}
-          {group.map((button) => {
-            const label = labels[button.label];
-            const active = state.active[button.key] ?? false;
-            return (
-              <Button
-                key={button.key}
-                size="icon"
-                pressed={active}
-                aria-label={label}
-                title={label}
-                aria-pressed={button.isActive ? active : undefined}
-                disabled={state.disabled[button.key]}
-                onMouseDown={(event) => event.preventDefault()}
-                onClick={() => button.run(editor, setDialog)}
-              >
-                <button.icon size={16} />
-              </Button>
-            );
-          })}
-          {index === 0 ? (
-            <>
-              <ColorMenu editor={editor} mode="text" icon={Palette} active={state.color} />
-              <ColorMenu editor={editor} mode="highlight" icon={Highlighter} active={state.highlight} />
-            </>
-          ) : null}
-        </React.Fragment>
-      ))}
+    <div className={cx("bk-toolbar", slots.toolbar)}>
+      {entries.map((item, index) => {
+        if (item === "|") return <span key={`sep-${index}`} className={cx("bk-sep", slots.separator)} aria-hidden />;
+        if (item === "textColor") return <ColorMenu key={item} editor={editor} mode="text" icon={Palette} active={state.color} />;
+        if (item === "highlight") return <ColorMenu key={item} editor={editor} mode="highlight" icon={Highlighter} active={state.highlight} />;
+        const button = BUTTONS_BY_KEY.get(item)!;
+        const label = labels[button.label];
+        const active = state.active[button.key] ?? false;
+        return (
+          <Button
+            key={button.key}
+            size="icon"
+            pressed={active}
+            aria-label={label}
+            title={label}
+            aria-pressed={button.isActive ? active : undefined}
+            disabled={state.disabled[button.key]}
+            onMouseDown={(event) => event.preventDefault()}
+            onClick={() => button.run(editor, setDialog)}
+          >
+            <button.icon size={16} />
+          </Button>
+        );
+      })}
 
       {state.inTable ? (
-        <div className="bk-table-tools">
+        <div className={cx("bk-table-tools", slots.tableTools)}>
           {TABLE_ACTIONS.map((action) => (
             <Button key={action.key} variant="outline" size="sm" onMouseDown={(event) => event.preventDefault()} onClick={() => action.run(editor)}>
               {labels[action.label]}

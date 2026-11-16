@@ -1,0 +1,13 @@
+# Changelog
+
+## 0.2.0
+
+- Customization: every color, radius, font, spacing, shadow and z-index in `styles.css` is now a `--bk-*` variable with a default (new: `--bk-font-size`, `--bk-line-height`, `--bk-h2-size`..`--bk-h4-size`, `--bk-block-gap`, `--bk-media-radius`, `--bk-code-inline-bg`, `--bk-hr-color`, `--bk-table-*`, `--bk-backdrop`, `--bk-*-shadow`, `--bk-z-*`, dialog/toolbar sizing, optional `--bk-link`, `--bk-heading-color`, `--bk-quote-border`, `--bk-radius-sm/lg`, `--bk-focus-ring`).
+- Dark theme preset: `[data-bk-theme="dark"]`, `.dark`, and `data-bk-theme="auto"` (follows the OS).
+- `RichTextEditor`: new `classNames` prop (root, toolbar, separator, button, content, tableTools, popover, dialog, input, label) and `toolbar` prop (choose / reorder items, `"|"` separator). Exports `defaultToolbar`, `ToolbarItem`, `EditorClassNames`. Defaults are unchanged.
+- `styles.css` is now wrapped in `@layer blog-kit` so consumer CSS wins; `styles.unlayered.css` is the previous plain form (new export).
+- Docs: README rewritten in Persian; new `AI_INSTALL_PROMPT.md` (shipped in the package) for AI-assisted installation.
+
+## 0.1.0
+
+- Initial release: Tiptap editor, Aparat/YouTube embeds, image upload, media library picker, server sanitizer, renderer.

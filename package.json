@@ -1,6 +1,6 @@
 {
   "name": "@ilamanownuk/blog-kit",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Reusable Tiptap blog editor for Next.js: Aparat/YouTube embeds, image upload, media library picker, server-side sanitizer and renderer.",
   "license": "MIT",
   "packageManager": "pnpm@12.18.0",
@@ -30,6 +30,8 @@
   "files": [
     "dist",
     "README.md",
+    "AI_INSTALL_PROMPT.md",
+    "CHANGELOG.md",
     "LICENSE"
   ],
   "main": "./dist/index.cjs",
@@ -67,6 +69,7 @@
       }
     },
     "./styles.css": "./dist/styles.css",
+    "./styles.unlayered.css": "./dist/styles.unlayered.css",
     "./package.json": "./package.json"
   },
   "publishConfig": {

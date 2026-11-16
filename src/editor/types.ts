@@ -42,6 +42,17 @@ export type MediaPickerRenderProps = {
 };
 
 export type { Labels } from "./labels";
+export type { EditorClassNames } from "./ui";
+
+/** Toolbar entries; "|" is a separator. */
+export type ToolbarItem =
+  | "bold" | "italic" | "underline" | "strike" | "textColor" | "highlight"
+  | "h2" | "h3" | "h4"
+  | "right" | "center" | "left" | "justify"
+  | "bullet" | "ordered" | "quote" | "code" | "hr"
+  | "link" | "unlink" | "image" | "video" | "table"
+  | "undo" | "redo"
+  | "|";
 
 export type RichTextEditorProps = {
   /** HTML string. */
@@ -51,7 +62,12 @@ export type RichTextEditorProps = {
   placeholder?: string;
   invalid?: boolean;
   id?: string;
+  /** Extra class on the root element (same as `classNames.root`). */
   className?: string;
+  /** Extra class names per part: root, toolbar, separator, button, content, tableTools, popover, dialog, input, label. Read once on mount for `content`. */
+  classNames?: import("./ui").EditorClassNames;
+  /** Which toolbar items to show, in order; "|" is a separator. Default: `defaultToolbar`. */
+  toolbar?: readonly ToolbarItem[];
   /** Enables the "Upload" button in the image dialog. Throw / reject to show an error. */
   uploadImage?: (file: File) => Promise<PickedImage>;
   /** Built-in media library picker. */

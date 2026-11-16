@@ -7,7 +7,9 @@ import { buildEditorExtensions } from "./extensions";
 import { defaultLabels, LabelsContext } from "./labels";
 import { RichTextToolbar } from "./toolbar";
 import type { RichTextEditorProps } from "./types";
-import { cx } from "./ui";
+import { ClassNamesContext, cx } from "./ui";
+
+const EMPTY = {};
 
 /**
  * Tiptap rich-text editor. Output is an HTML string; ALWAYS sanitize it on the server
@@ -20,6 +22,8 @@ export function RichTextEditor({
   invalid,
   id,
   className,
+  classNames,
+  toolbar,
   uploadImage,
   mediaApi,
   renderMediaPicker,
@@ -37,7 +41,7 @@ export function RichTextEditor({
     content: value,
     immediatelyRender: false, // SSR-safe
     editorProps: {
-      attributes: { class: "bk-rich bk-editor-content", dir, ...(id ? { id } : {}) },
+      attributes: { class: cx("bk-rich bk-editor-content", classNames?.content), dir, ...(id ? { id } : {}) },
     },
     onUpdate: ({ editor: e }) => onChangeRef.current(e.isEmpty ? "" : e.getHTML()),
   });
@@ -51,11 +55,13 @@ export function RichTextEditor({
 
   return (
     <LabelsContext.Provider value={merged}>
-      <div className={cx("bk-editor", invalid && "bk-invalid", className)} dir={dir}>
+      <ClassNamesContext.Provider value={classNames ?? EMPTY}>
+      <div className={cx("bk-editor", invalid && "bk-invalid", classNames?.root, className)} dir={dir}>
         {editor ? (
           <RichTextToolbar
             editor={editor}
             dir={dir}
+            items={toolbar}
             allowedEmbeds={allowedEmbeds}
             uploadImage={uploadImage}
             mediaApi={mediaApi}
@@ -65,6 +71,7 @@ export function RichTextEditor({
         ) : null}
         <EditorContent editor={editor} />
       </div>
+      </ClassNamesContext.Provider>
     </LabelsContext.Provider>
   );
 }

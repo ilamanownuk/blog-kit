@@ -1,5 +1,10 @@
-/* @ilamanownuk/blog-kit — no Tailwind needed. Override the --bk-* variables on :root or any ancestor. */
+/*
+ * @ilamanownuk/blog-kit — no Tailwind needed.
+ * Customize by overriding the --bk-* variables on :root or any ancestor (or `[data-bk-theme="dark"]`).
+ * Every rule lives in `@layer blog-kit` in dist/styles.css, so your own unlayered CSS always wins.
+ */
 :root {
+  /* colors */
   --bk-accent: #997b2d;
   --bk-accent-contrast: #fff;
   --bk-fg: #1c1c1c;
@@ -9,18 +14,95 @@
   --bk-muted: #f3f4f6;
   --bk-border: #e5e7eb;
   --bk-danger: #b91c1c;
-  --bk-radius: 0.5rem;
-  --bk-font: inherit;
-  --bk-editor-min-height: 360px;
   --bk-code-bg: #1c1c1c;
   --bk-code-fg: #f5f5f5;
+  --bk-code-inline-bg: rgb(0 0 0 / 0.06);
   --bk-mark-bg: #fde68a;
+  --bk-hr-color: rgb(0 0 0 / 0.12);
+  --bk-table-border: rgb(0 0 0 / 0.15);
+  --bk-table-head-bg: rgb(0 0 0 / 0.04);
+  --bk-backdrop: rgb(0 0 0 / 0.5);
+  /* typography */
+  --bk-font: inherit;
+  --bk-code-font: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --bk-font-size: 1rem;
+  --bk-line-height: 2.1;
+  --bk-h2-size: 1.35rem;
+  --bk-h3-size: 1.15rem;
+  --bk-h4-size: 1rem;
+  --bk-heading-weight: 800;
+  /* shape + spacing */
+  --bk-radius: 0.5rem;
+  --bk-media-radius: 1rem;
+  --bk-block-gap: 1rem;
+  --bk-editor-min-height: 360px;
+  --bk-editor-padding: 0.75rem 1rem;
+  --bk-toolbar-padding: 0.375rem;
+  --bk-toolbar-gap: 0.25rem;
+  --bk-control-size: 2rem;
+  --bk-dialog-width: 28rem;
+  --bk-dialog-wide-width: 56rem;
+  /* shadows + layers */
+  --bk-popover-shadow: 0 8px 24px rgb(0 0 0 / 0.12);
+  --bk-dialog-shadow: 0 16px 48px rgb(0 0 0 / 0.2);
+  --bk-z-toolbar: 10;
+  --bk-z-popover: 20;
+  /*
+   * Optional (not set by default, fall back to the values shown):
+   *   --bk-link (var(--bk-accent)), --bk-heading-color (inherit), --bk-quote-border (var(--bk-accent)),
+   *   --bk-radius-sm (radius - 2px), --bk-radius-lg (radius + 4px), --bk-focus-ring (var(--bk-accent))
+   */
+}
+
+/* Dark preset: put data-bk-theme="dark" (or Tailwind's .dark) on <html>/<body>.
+   Dialogs render into <body>, so set it on html/body, not only on a wrapper. */
+[data-bk-theme="dark"],
+.dark {
+  --bk-accent: #d4b25a;
+  --bk-accent-contrast: #1c1c1c;
+  --bk-fg: #ededed;
+  --bk-muted-fg: #9ca3af;
+  --bk-bg: #141414;
+  --bk-surface: #1c1c1c;
+  --bk-muted: #262626;
+  --bk-border: #333;
+  --bk-danger: #f87171;
+  --bk-code-bg: #0a0a0a;
+  --bk-code-fg: #f5f5f5;
+  --bk-code-inline-bg: rgb(255 255 255 / 0.1);
+  --bk-mark-bg: #854d0e;
+  --bk-hr-color: rgb(255 255 255 / 0.15);
+  --bk-table-border: rgb(255 255 255 / 0.18);
+  --bk-table-head-bg: rgb(255 255 255 / 0.06);
+  --bk-popover-shadow: 0 8px 24px rgb(0 0 0 / 0.5);
+  --bk-dialog-shadow: 0 16px 48px rgb(0 0 0 / 0.6);
+}
+@media (prefers-color-scheme: dark) {
+  [data-bk-theme="auto"] {
+    --bk-accent: #d4b25a;
+    --bk-accent-contrast: #1c1c1c;
+    --bk-fg: #ededed;
+    --bk-muted-fg: #9ca3af;
+    --bk-bg: #141414;
+    --bk-surface: #1c1c1c;
+    --bk-muted: #262626;
+    --bk-border: #333;
+    --bk-danger: #f87171;
+    --bk-code-bg: #0a0a0a;
+    --bk-code-inline-bg: rgb(255 255 255 / 0.1);
+    --bk-mark-bg: #854d0e;
+    --bk-hr-color: rgb(255 255 255 / 0.15);
+    --bk-table-border: rgb(255 255 255 / 0.18);
+    --bk-table-head-bg: rgb(255 255 255 / 0.06);
+    --bk-popover-shadow: 0 8px 24px rgb(0 0 0 / 0.5);
+    --bk-dialog-shadow: 0 16px 48px rgb(0 0 0 / 0.6);
+  }
 }
 
 /* ---------- Content (editor + renderer) ---------- */
 .bk-rich {
-  font-size: 1rem;
-  line-height: 2.1;
+  font-size: var(--bk-font-size);
+  line-height: var(--bk-line-height);
   overflow-wrap: anywhere;
   color: var(--bk-fg);
   font-family: var(--bk-font);
@@ -28,12 +110,12 @@
 .bk-rich[dir="rtl"] { text-align: right; }
 .bk-rich[dir="ltr"] { text-align: left; }
 .bk-rich > *:first-child { margin-top: 0; }
-.bk-rich p { margin: 0 0 1rem; }
-.bk-rich h2 { margin: 2rem 0 0.75rem; font-size: 1.35rem; font-weight: 800; line-height: 1.5; }
-.bk-rich h3 { margin: 1.5rem 0 0.5rem; font-size: 1.15rem; font-weight: 700; line-height: 1.5; }
-.bk-rich h4 { margin: 1.25rem 0 0.5rem; font-size: 1rem; font-weight: 700; line-height: 1.5; }
-.bk-rich a { color: var(--bk-accent); text-decoration: underline; text-underline-offset: 4px; }
-.bk-rich ul, .bk-rich ol { margin: 0 0 1rem; padding-inline-start: 1.25rem; }
+.bk-rich p { margin: 0 0 var(--bk-block-gap); }
+.bk-rich h2 { margin: 2rem 0 0.75rem; font-size: var(--bk-h2-size); font-weight: var(--bk-heading-weight); line-height: 1.5; color: var(--bk-heading-color, inherit); }
+.bk-rich h3 { margin: 1.5rem 0 0.5rem; font-size: var(--bk-h3-size); font-weight: 700; line-height: 1.5; color: var(--bk-heading-color, inherit); }
+.bk-rich h4 { margin: 1.25rem 0 0.5rem; font-size: var(--bk-h4-size); font-weight: 700; line-height: 1.5; color: var(--bk-heading-color, inherit); }
+.bk-rich a { color: var(--bk-link, var(--bk-accent)); text-decoration: underline; text-underline-offset: 4px; }
+.bk-rich ul, .bk-rich ol { margin: 0 0 var(--bk-block-gap); padding-inline-start: 1.25rem; }
 .bk-rich ul { list-style-type: disc; }
 .bk-rich ol { list-style-type: decimal; }
 .bk-rich li + li { margin-top: 0.4rem; }
@@ -41,13 +123,13 @@
 .bk-rich blockquote {
   margin-block: 1.5rem;
   margin-inline: 0;
-  border-inline-start: 4px solid var(--bk-accent);
+  border-inline-start: 4px solid var(--bk-quote-border, var(--bk-accent));
   padding-inline-start: 1rem;
   font-style: italic;
   opacity: 0.85;
 }
 .bk-rich pre {
-  margin-block: 1rem;
+  margin-block: var(--bk-block-gap);
   overflow-x: auto;
   border-radius: var(--bk-radius);
   background: var(--bk-code-bg);
@@ -55,18 +137,19 @@
   padding: 0.75rem 1rem;
   direction: ltr;
   text-align: left;
+  font-family: var(--bk-code-font);
   font-size: 0.875rem;
   line-height: 1.6;
 }
-.bk-rich code { border-radius: 0.25rem; background: rgb(0 0 0 / 0.06); padding: 0.1rem 0.3rem; font-size: 0.875em; }
+.bk-rich code { border-radius: 0.25rem; background: var(--bk-code-inline-bg); padding: 0.1rem 0.3rem; font-family: var(--bk-code-font); font-size: 0.875em; }
 .bk-rich pre code { background: none; padding: 0; }
 .bk-rich mark { border-radius: 0.2rem; background-color: var(--bk-mark-bg); padding: 0 0.15rem; color: inherit; }
-.bk-rich hr { margin-block: 2rem; border: 0; border-top: 1px solid rgb(0 0 0 / 0.12); }
-.bk-rich img { display: block; margin-block: 1.5rem; height: auto; max-width: 100%; border-radius: 1rem; }
-.bk-rich iframe { display: block; margin-block: 1.5rem; aspect-ratio: 16 / 9; width: 100%; border: 0; border-radius: 1rem; }
+.bk-rich hr { margin-block: 2rem; border: 0; border-top: 1px solid var(--bk-hr-color); }
+.bk-rich img { display: block; margin-block: 1.5rem; height: auto; max-width: 100%; border-radius: var(--bk-media-radius); }
+.bk-rich iframe { display: block; margin-block: 1.5rem; aspect-ratio: 16 / 9; width: 100%; border: 0; border-radius: var(--bk-media-radius); }
 .bk-rich table { display: block; margin-block: 1.5rem; max-width: 100%; overflow-x: auto; border-collapse: collapse; }
-.bk-rich th, .bk-rich td { min-width: 4rem; border: 1px solid rgb(0 0 0 / 0.15); padding: 0.4rem 0.75rem; vertical-align: top; }
-.bk-rich th { background: rgb(0 0 0 / 0.04); font-weight: 700; }
+.bk-rich th, .bk-rich td { min-width: 4rem; border: 1px solid var(--bk-table-border); padding: 0.4rem 0.75rem; vertical-align: top; }
+.bk-rich th { background: var(--bk-table-head-bg); font-weight: 700; }
 .bk-rich th > p, .bk-rich td > p { margin-bottom: 0; }
 
 /* ---------- Tiptap / ProseMirror ---------- */
@@ -79,7 +162,7 @@
 }
 .tiptap .selectedCell { background: var(--bk-muted); }
 .tiptap img.ProseMirror-selectednode,
-.tiptap iframe.ProseMirror-selectednode { outline: 2px solid var(--bk-accent); }
+.tiptap iframe.ProseMirror-selectednode { outline: 2px solid var(--bk-focus-ring, var(--bk-accent)); }
 .tiptap iframe { pointer-events: none; }
 
 /* ---------- Editor shell ---------- */
@@ -92,18 +175,18 @@
   font-family: var(--bk-font);
 }
 .bk-editor.bk-invalid { border-color: var(--bk-danger); }
-.bk-editor-content { min-height: var(--bk-editor-min-height); padding: 0.75rem 1rem; outline: none; }
+.bk-editor-content { min-height: var(--bk-editor-min-height); padding: var(--bk-editor-padding); outline: none; }
 .bk-editor-content:focus { outline: none; }
 
 .bk-toolbar {
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: var(--bk-z-toolbar);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.25rem;
-  padding: 0.375rem;
+  gap: var(--bk-toolbar-gap);
+  padding: var(--bk-toolbar-padding);
   border-bottom: 1px solid var(--bk-border);
   background: var(--bk-surface);
 }
@@ -117,7 +200,7 @@
   justify-content: center;
   gap: 0.375rem;
   border: 1px solid transparent;
-  border-radius: calc(var(--bk-radius) - 2px);
+  border-radius: var(--bk-radius-sm, calc(var(--bk-radius) - 2px));
   background: transparent;
   color: inherit;
   font: inherit;
@@ -127,9 +210,9 @@
   white-space: nowrap;
 }
 .bk-btn:disabled { opacity: 0.45; cursor: not-allowed; }
-.bk-btn:focus-visible { outline: 2px solid var(--bk-accent); outline-offset: 1px; }
+.bk-btn:focus-visible { outline: 2px solid var(--bk-focus-ring, var(--bk-accent)); outline-offset: 1px; }
 .bk-btn svg { flex: none; width: 1rem; height: 1rem; }
-.bk-btn-icon { width: 2rem; height: 2rem; padding: 0; }
+.bk-btn-icon { width: var(--bk-control-size); height: var(--bk-control-size); padding: 0; }
 .bk-btn-sm { height: 1.75rem; padding: 0 0.5rem; font-size: 0.75rem; }
 .bk-btn-md { height: 2.25rem; padding: 0 0.875rem; }
 .bk-btn-ghost:hover:not(:disabled) { background: var(--bk-muted); }
@@ -145,13 +228,13 @@
   height: 2.25rem;
   padding: 0 0.625rem;
   border: 1px solid var(--bk-border);
-  border-radius: calc(var(--bk-radius) - 2px);
+  border-radius: var(--bk-radius-sm, calc(var(--bk-radius) - 2px));
   background: var(--bk-bg);
   color: inherit;
   font: inherit;
   font-size: 0.875rem;
 }
-.bk-input:focus-visible { outline: 2px solid var(--bk-accent); outline-offset: 0; }
+.bk-input:focus-visible { outline: 2px solid var(--bk-focus-ring, var(--bk-accent)); outline-offset: 0; }
 .bk-label { font-size: 0.875rem; font-weight: 600; }
 .bk-error { margin: 0; font-size: 0.75rem; color: var(--bk-danger); }
 .bk-sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; padding: 0; }
@@ -163,12 +246,12 @@
   position: absolute;
   inset-block-start: calc(100% + 0.25rem);
   inset-inline-start: 0;
-  z-index: 20;
+  z-index: var(--bk-z-popover);
   padding: 0.5rem;
   border: 1px solid var(--bk-border);
   border-radius: var(--bk-radius);
   background: var(--bk-bg);
-  box-shadow: 0 8px 24px rgb(0 0 0 / 0.12);
+  box-shadow: var(--bk-popover-shadow);
 }
 .bk-colors { display: flex; align-items: center; gap: 0.375rem; }
 .bk-swatch { width: 1.5rem; height: 1.5rem; padding: 0; border: 1px solid var(--bk-border); border-radius: 999px; cursor: pointer; }
@@ -176,18 +259,18 @@
 /* ---------- Dialogs ---------- */
 .bk-dialog {
   box-sizing: border-box;
-  width: min(28rem, calc(100vw - 2rem));
+  width: min(var(--bk-dialog-width), calc(100vw - 2rem));
   margin: auto;
   padding: 0;
   border: 1px solid var(--bk-border);
-  border-radius: calc(var(--bk-radius) + 4px);
+  border-radius: var(--bk-radius-lg, calc(var(--bk-radius) + 4px));
   background: var(--bk-bg);
   color: var(--bk-fg);
   font-family: var(--bk-font);
-  box-shadow: 0 16px 48px rgb(0 0 0 / 0.2);
+  box-shadow: var(--bk-dialog-shadow);
 }
-.bk-dialog::backdrop { background: rgb(0 0 0 / 0.5); }
-.bk-dialog-wide { width: min(56rem, calc(100vw - 2rem)); }
+.bk-dialog::backdrop { background: var(--bk-backdrop); }
+.bk-dialog-wide { width: min(var(--bk-dialog-wide-width), calc(100vw - 2rem)); }
 .bk-dialog-body { display: flex; flex-direction: column; max-height: 85vh; }
 .bk-form { display: flex; flex-direction: column; gap: 1rem; padding: 1.25rem; }
 .bk-field { display: flex; flex-direction: column; gap: 0.375rem; }
@@ -208,7 +291,7 @@
 @media (min-width: 640px) { .bk-media-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (min-width: 768px) { .bk-media-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 .bk-media-item { position: relative; display: block; width: 100%; aspect-ratio: 1; padding: 0; overflow: hidden; border: 1px solid var(--bk-border); border-radius: var(--bk-radius); background: var(--bk-muted); cursor: pointer; }
-.bk-media-item:focus-visible { outline: 2px solid var(--bk-accent); }
+.bk-media-item:focus-visible { outline: 2px solid var(--bk-focus-ring, var(--bk-accent)); }
 .bk-media-item.bk-selected { border-color: var(--bk-accent); box-shadow: 0 0 0 2px var(--bk-accent); }
 .bk-media-item img { width: 100%; height: 100%; object-fit: cover; margin: 0; border-radius: 0; }
 .bk-media-check { position: absolute; inset-block-start: 0.375rem; inset-inline-end: 0.375rem; display: flex; width: 1.5rem; height: 1.5rem; align-items: center; justify-content: center; border-radius: 999px; background: var(--bk-accent); color: var(--bk-accent-contrast); }

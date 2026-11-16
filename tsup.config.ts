@@ -1,4 +1,4 @@
-import { copyFile, mkdir } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { defineConfig } from "tsup";
 
 const common = {
@@ -18,7 +18,10 @@ export default defineConfig([
     banner: { js: '"use client";' },
     async onSuccess() {
       await mkdir("dist", { recursive: true });
-      await copyFile("src/styles.css", "dist/styles.css");
+      // styles.css is wrapped in `@layer blog-kit` (consumer CSS wins); styles.unlayered.css is the plain file.
+      const css = await readFile("src/styles.css", "utf8");
+      await writeFile("dist/styles.unlayered.css", css);
+      await writeFile("dist/styles.css", `@layer blog-kit {\n${css}\n}\n`);
     },
   },
   { ...common, entry: { renderer: "src/renderer/index.tsx" } },
