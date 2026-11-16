@@ -1,4 +1,3 @@
-````text
 You are an AI coding agent. Install and wire the npm package `@ilamanownuk/blog-kit` into THIS project, following the rules below exactly. Work step by step, and do not stop after the first working screen: finish the whole checklist.
 
 # 0. What the package is
@@ -140,12 +139,3 @@ CSS variables (`--bk-*`): accent, accent-contrast, fg, muted-fg, bg, surface, mu
 # 6. Final report (keep it short)
 
 List: files created/changed/removed, how upload/media adapters were connected (or why skipped), shared constants location, theme mapping done, commands run and their results, and anything left for the human (e.g. data migration, missing upload endpoint). Do not paste large code.
-````
-
----
-
-## نکته‌ها برای شما
-
-- اگر پروژه‌تان Nest جداست، پرامپت از هوش مصنوعی می‌خواهد sanitize را در سرویس Nest انجام دهد و ادیتور را در فرانت نگه دارد.
-- بعد از اتمام کار، خروجی گزارش آن را بخوانید و بخش «anything left for the human» را بررسی کنید.
-- مرجع کامل فارسی: [`README.md`](./README.md).
